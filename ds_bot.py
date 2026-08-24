@@ -3,6 +3,11 @@ from discord.ext import commands
 import random
 import asyncio
 import os
+from keep_alive import keep_alive
+
+keep_alive()
+
+intents = discord.Intents.default()
 
 TOKEN = os.environ.get('DISCORD_TOKEN')
 
