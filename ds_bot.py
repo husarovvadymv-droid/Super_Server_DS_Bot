@@ -19,7 +19,7 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 SERVER_IP = " listing-dans.gl.joinmc.link"
 SERVER_VERSION = "1.21.10"
-WELCOME_CHANNEL_ID = Айді  
+WELCOME_CHANNEL_ID = int(os.environ.get('WELCOME_CHANNEL_ID', 1527321504096981084))
 
 SECRET_LOGS = [
     "📡 [СИГНАЛ]: Зафіксовано запуск архівування `.tar.gz`. Резервна копія успішно завантажена на GitHub.",
