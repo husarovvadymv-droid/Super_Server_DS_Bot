@@ -26,6 +26,59 @@ SECRET_LOGS = [
     "🔒 [БЕЗПЕКА]: Спроба несанкціонованого доступу відхилена."
 ]
 
+@bot.event
+async def on_ready():
+    print(f'🤖 Бот {bot.user.name} успішно запустився і готовий до роботи!')
+    await bot.change_presence(activity=discord.Game(name="Злом бази даних..."))
+
+@bot.event
+async def on_member_join(member):
+    channel = bot.get_channel(WELCOME_CHANNEL_ID)
+    if channel:
+        embed = discord.Embed(
+            title="📥 ВИЯВЛЕНО НОВИЙ СИГНАЛ",
+            description=f"Об'єкт {member.mention} успішно підключився до мережі.",
+            color=discord.Color.blue()
+        )
+        embed.add_field(name="Сканування особистості", value="Пройдено успішно ✅", inline=True)
+        embed.add_field(name="Рівень доступу", value="Гість (Рівень 1)", inline=True)
+        embed.set_thumbnail(url=member.avatar.url if member.avatar else member.default_avatar.url)
+        embed.set_footer(text="Організація «Світ» • База даних оновлена")
+        
+        await channel.send(embed=embed)
+
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f"Привіт, {ctx.author.mention}! На зв\'язку Організація «Світ». Протоколи активовано.")
+
+@bot.command()
+async def status(ctx, *, target_name: str = None):
+    if target_name is None:
+        await ctx.send("❓ **Помилка:** Вкажіть ім'я об'єкта. Наприклад: `!status віталій`")
+        return
+
+    name_lower = target_name.lower()
+
+    if name_lower == "віталій":
+        embed = discord.Embed(
+            title="🚨 СИСТЕМНА ТРИВОГА 🚨",
+            description="Зафіксовано підозрілу активність у секторі складу!",
+            color=discord.Color.red()
+        )
+        embed.add_field(name="Об'єкт", value="Наглядач Віталій", inline=True)
+        embed.add_field(name="Статус", value="Переносить зашифровані архіви", inline=True)
+        embed.set_footer(text="Організація «Світ» • Моніторинг безпеки")
+        await ctx.send(embed=embed)
+        
+    elif name_lower in ["адмін", "титан", "вадим"]:
+        await ctx.send(f"🔍 Статус об'єкта **{target_name}**: Стабільний. Аномалій не виявлено. Доступ дозволено.")
+
+    elif name_lower in ["sys_admin", "i"]:
+        await ctx.send(f"🔍 Статус об'єкта **{target_name}**: Може становити загрозу. Стежити обов'язково.")
+        
+    else:
+        await ctx.send(f"❌ **ПОМИЛКА ДОСТУПУ:** Об'єкт **{target_name}** відсутній у базі даних Організації «Світ».")
+
 def get_status_data():
     try:
         server = JavaServer.lookup(SERVER_IP)
